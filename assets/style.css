@@ -1,0 +1,705 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+._dash-loading {
+    margin: 0;
+    padding: 0;
+}
+
+/* Основной контейнер карты */
+.map-container {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+/* Оптимизация производительности Leaflet */
+.leaflet-container {
+    transition: all 0.3s ease;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Контейнер для трех верхних панелей */
+.top-panels-container {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Унифицируем высоту всех верхних панелей */
+.case-panel, .main-controls-panel, .comparison-panel {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.95);
+    padding: 12px 15px;
+    border-radius: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    height: 60px;
+    box-sizing: border-box;
+}
+
+/* Основная панель управления */
+.main-controls-panel {
+    gap: 15px;
+    min-width: 400px;
+    justify-content: center;
+}
+
+/* Панель выбора кейса */
+.case-panel {
+    gap: 15px;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.case-selector-top {
+    min-width: 210px;
+}
+
+/* Панель сравнения */
+.comparison-panel {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.95);
+    padding: 8px 15px;
+    border-radius: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    min-width: 220px;
+    height: 60px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+
+/* Убираем лишние отступы у элементов панели сравнения */
+.comparison-panel .dcc-dropdown {
+    margin-bottom: 0 !important;
+}
+
+.comparison-panel .dcc-radioitems {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Стили для радиокнопок */
+.dcc-radioitems {
+    font-size: 11px !important;
+}
+
+.dcc-radioitems label {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2;
+}
+
+/* Селектор данных */
+.data-selector-top {
+    min-width: 150px;
+}
+
+/* Селектор года */
+.year-selector-top {
+    min-width: 120px;
+}
+
+/* Переключатель регионы/округа вверху */
+.map-controls-top {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.switch-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.switch-label.active {
+    background: #007bff;
+    color: white;
+}
+
+.switch-label:not(.active):hover {
+    background: #e9ecef;
+}
+
+/* Кнопки для выдвижения панелей */
+.sidebar-toggle {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 80px;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    margin-top: -40px;
+}
+
+.sidebar-toggle:hover {
+    background: #f0f0f0;
+    border-color: #999;
+}
+
+.left-toggle {
+    left: 10px;
+}
+
+.right-toggle {
+    right: 10px;
+}
+
+.left-toggle.panel-open {
+    left: 17vw;
+}
+
+.right-toggle.panel-open {
+    right: 34vw;
+}
+
+/* Выдвижные панели */
+.side-panel {
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.left-panel {
+    left: 0;
+    width: 17vw;
+    transform: translateX(-100%);
+}
+
+.right-panel {
+    right: 0;
+    width: 34vw;
+    transform: translateX(100%);
+}
+
+.panel-open {
+    transform: translateX(0);
+}
+
+/* Контент панелей */
+.panel-content {
+    margin-top: 20px;
+}
+
+.panel-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Горизонтальная легенда - низ экрана */
+.horizontal-legend {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 80%;
+    min-width: 300px;
+}
+
+.legend-items-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+.legend-item-horizontal {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.legend-color-horizontal {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.legend-label-horizontal {
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.legend-title-horizontal {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Информация о регионе - выше легенды */
+.hover-info-center {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    min-width: 200px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #007bff;
+}
+
+/* Стили для Dropdown */
+.Select-control {
+    background-color: white !important;
+    border: 1px solid #ddd !important;
+    border-radius: 20px !important;
+}
+
+.Select-menu-outer {
+    border-radius: 10px !important;
+    margin-top: 5px !important;
+    min-width: 280px !important;
+    z-index: 1002 !important;
+}
+
+.Select-option {
+    white-space: normal !important;
+    line-height: 1.4 !important;
+    padding: 8px 12px !important;
+}
+
+.Select-value-label {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Стили для правой панели аналитики */
+.analytics-tabs {
+    margin-top: 20px;
+}
+
+.kpi-cards {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.kpi-card {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    flex: 1;
+    border-left: 4px solid #007bff;
+}
+
+.kpi-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.kpi-label {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Стили для графиков */
+.dash-graph {
+    margin-bottom: 20px;
+}
+
+/* Стили для таблиц в аналитике */
+.dash-table-container {
+    margin-top: 10px;
+}
+
+/* Стили для вертикального расположения рейтингов */
+.rankings-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ranking-table-container {
+    margin-bottom: 30px;
+}
+
+.ranking-table-container h6 {
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Улучшаем отображение таблиц */
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner table {
+    width: 100% !important;
+}
+
+/* Адаптивность */
+@media (max-width: 1400px) {
+    .top-panels-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .main-controls-panel {
+        min-width: 350px;
+    }
+
+    .case-panel, .comparison-panel {
+        min-width: 180px;
+    }
+
+    .right-panel {
+        width: 50vw;
+    }
+
+    .right-toggle.panel-open {
+        right: 50vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-panels-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .main-controls-panel {
+        min-width: 300px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .case-panel, .comparison-panel {
+        min-width: 150px;
+    }
+
+    .right-panel {
+        width: 80vw;
+    }
+
+    .right-toggle.panel-open {
+        right: 80vw;
+    }
+
+    .horizontal-legend {
+        bottom: 10px;
+        max-width: 90%;
+    }
+
+    .hover-info-center {
+        bottom: 120px;
+    }
+
+    .ranking-table-container {
+        margin-bottom: 20px;
+    }
+
+    .dash-table-container .dash-spreadsheet-container {
+        overflow-x: auto;
+    }
+}
+
+/* Убедимся, что все элементы видны */
+#map-legend, #hover-info, .top-panels-container {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Стили для кнопок */
+button {
+    cursor: pointer;
+}
+
+/* Улучшаем видимость элементов управления */
+.leaflet-control-container {
+    z-index: 999;
+}
+
+/* Убедимся, что панели не перекрывают элементы управления */
+.side-panel {
+    z-index: 1000;
+}
+
+.sidebar-toggle {
+    z-index: 1001;
+}
+
+.legend-color-horizontal.delta-negative-strong {
+    background-color: #8b0000 !important;
+}
+.legend-color-horizontal.delta-negative-medium {
+    background-color: #ff0000 !important;
+}
+.legend-color-horizontal.delta-negative-weak {
+    background-color: #ff6b6b !important;
+}
+.legend-color-horizontal.delta-neutral {
+    background-color: #d3d3d3 !important;
+}
+.legend-color-horizontal.delta-positive-weak {
+    background-color: #90ee90 !important;
+}
+.legend-color-horizontal.delta-positive-medium {
+    background-color: #008000 !important;
+}
+.legend-color-horizontal.delta-positive-strong {
+    background-color: #006400 !important;
+}
+
+/* В style.css добавьте: */
+.value-switch-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-left: 10px;
+}
+
+.value-switch-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    padding: 3px 8px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.value-switch-label.active {
+    background: #28a745;
+    color: white;
+}
+
+.value-switch-label:not(.active):hover {
+    background: #e9ecef;
+}
+
+/* Стили для кнопки описания кейса */
+.case-description-btn button:hover {
+    background: #545b62 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Стили для списков в описании кейса */
+#case-indicators-list li {
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+#case-insights ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+#case-insights li {
+    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .case-selector-top {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    #case-description-btn {
+        margin-left: 0 !important;
+        margin-top: 10px;
+    }
+}
+
+/* Новая панель описания кейса */
+.case-description-panel {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.95);
+    padding: 12px 15px;
+    border-radius: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    height: 60px;
+    box-sizing: border-box;
+}
+
+.case-description-top {
+    min-width: 140px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Стили для кнопки описания кейса с белым фоном */
+#case-description-btn {
+    background: white !important;
+    color: #333 !important;
+    border: 1px solid #ddd !important;
+    padding: 8px 12px !important;
+    border-radius: 15px !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-weight: 500 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+#case-description-btn:hover {
+    background: #f8f9fa !important;
+    border-color: #007bff !important;
+    color: #007bff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 1400px) {
+    .top-panels-container {
+        gap: 10px;
+    }
+
+    .case-description-panel,
+    .case-panel {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .top-panels-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .case-description-panel {
+        order: 1;
+    }
+
+    .case-panel {
+        order: 2;
+    }
+
+    .main-controls-panel {
+        order: 3;
+        min-width: 350px;
+    }
+
+    .comparison-panel {
+        order: 4;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-panels-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .case-description-panel,
+    .case-panel,
+    .main-controls-panel,
+    .comparison-panel {
+        width: 100%;
+        min-width: auto;
+        justify-content: center;
+    }
+
+    .case-description-top {
+        min-width: auto;
+    }
+}
+
+/* Стили для ссылки на GitHub */
+.github-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.github-link:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    text-decoration: none;
+}
+
+.github-link:active {
+    transform: translateY(0);
+}
+
+.github-icon {
+    font-size: 18px;
+}

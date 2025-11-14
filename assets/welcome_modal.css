@@ -1,0 +1,95 @@
+/* assets/welcome_modal.css */
+
+.welcome-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.welcome-modal-content {
+    background-color: #fefefe;
+    position: fixed;
+    top: 5%;        /* 10% от верха экрана */
+    left: 50%;
+    transform: translateX(-50%); /* Только по горизонтали */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    width: 80%;
+    max-width: 700px;
+    max-height: 85vh;  /* УВЕЛИЧИЛИ с 80vh до 90vh */
+    height: auto;      /* ДОБАВЬТЕ для адаптивности */
+    min-height: 500px; /* ДОБАВЬТЕ минимальную высоту */
+    overflow-y: auto;
+    z-index: 10001;
+}
+
+.welcome-modal-close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.welcome-modal-close:hover {
+    color: #000;
+}
+
+.welcome-feature {
+    display: flex;
+    align-items: flex-start;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.welcome-feature-icon {
+    font-size: 24px;
+    margin-right: 15px;
+    color: #007bff;
+}
+
+.welcome-feature-text h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.welcome-feature-text p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.welcome-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.welcome-button:hover {
+    background: #0056b3;
+}
+
+.show-modal {
+    display: block !important;
+}
+
+.help-button:hover {
+    background: #0056b3 !important;
+}

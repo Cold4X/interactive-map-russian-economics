@@ -1,0 +1,50 @@
+/* Стили для блока корректировки цен */
+.price-adjustment-container {
+    transition: all 0.3s ease;
+}
+
+.price-adjustment-container:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+
+/* Заставляем дропдаун открываться вверх */
+#price-adjustment-dropdown .Select-menu-outer {
+    top: auto !important;
+    bottom: 100% !important;
+    border-radius: 4px 4px 0 0 !important;
+}
+
+#price-adjustment-dropdown .Select-control {
+    border-radius: 4px !important;
+}
+
+#price-adjustment-dropdown.is-open .Select-control {
+    border-radius: 0 0 4px 4px !important;
+}
+
+/* Стили для самого дропдауна */
+#price-adjustment-dropdown .Select-value {
+    font-size: 12px !important;
+}
+
+#price-adjustment-dropdown .Select-input {
+    font-size: 12px !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .price-adjustment-container {
+        bottom: 10px !important;
+        left: 10px !important;
+        padding: 6px 8px !important;
+    }
+
+    .price-adjustment-container .Select-control {
+        width: 100px !important;
+    }
+
+    #price-adjustment-dropdown .Select-menu-outer {
+        min-width: 120px !important;
+        left: 0 !important;
+    }
+}
