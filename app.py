@@ -152,6 +152,7 @@ style_handle = assign("""function(feature, context){
 }""")
 
 app = DashProxy(suppress_callback_exceptions=True)
+server = app.server
 
 # Начальные данные
 initial_geojson = load_geojson_with_detail("assets/russia_regions_pf.geojson", DETAIL_LEVELS["high"]["value"], DEFAULT_YEAR)
